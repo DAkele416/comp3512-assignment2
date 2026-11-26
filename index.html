@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assignment 2 - Product Browser</title>
+
+    <link rel="stylesheet" href="./style.css">
+    <script type="module" src="./script.js"></script>
+</head>
+
+<body>
+    <!-- Shared header and navigation -->
+    <header>
+        <h1>
+            <button type="button" id="logo-button">
+                Assignment 2 - Product Browser
+            </button>
+        </h1>
+
+        <nav>
+            <button type="button" id="home-button"> Home </button>
+            <button type="button" id="browse-button"> Browse </button>
+            <button type="button" id="cart-button">
+                Shopping Cart (<span id="cart-count">0</span>)
+            </button>
+            <button type="button" id="about-button"> About Us </button>
+        </nav>
+    </header>
+
+    <!-- Confirmation message for cart actions -->
+    <div id="notification" style="display: none;">
+        <span id="notification-message"></span>
+        <button type="button" id="close-notification"> Close </button>
+    </div>
+
+    <main>
+        <!-- Home view: welcome banner and featured products -->
+        <section id="home-view">
+            <div id="home-hero">
+                <h2>Everyday finds, all in one place.</h2>
+                <p>Explore beauty, furniture, groceries, and more.</p>
+                <button type="button" id="shop-now-button">
+                    Shop Now
+                </button>
+            </div>
+
+            <h2>Featured Products</h2>
+            <div id="featured-products"></div>
+        </section>
+
+        <!-- Browse view: filters, sorting, and product results -->
+        <section id="browse-view" style="display: none;">
+            <h2> Browse Products </h2>
+            <div id="browse-layout">
+                <aside id="browse-filters">
+
+                    <button type="button" id="name-filter-button"> Name filter</button>
+
+                    <div id="name-filter-panel">
+                        <label for="name-filter"> Product name: </label>
+                        <input type="text" id="name-filter">
+                    </div>
+
+                    <button type="button" id="category-filter-button"> Category filter </button>
+                    <div id="category-filter-panel"></div>
+
+                    <button type="button" id="rating-filter-button"> Rating filter </button>
+
+                    <div id="rating-filter-panel">
+                        <label><input type="checkbox" class="rating-checkbox" value="1"> ★☆☆☆☆ </label>
+                        <label><input type="checkbox" class="rating-checkbox" value="2"> ★★☆☆☆ </label>
+                        <label><input type="checkbox" class="rating-checkbox" value="3"> ★★★☆☆ </label>
+                        <label><input type="checkbox" class="rating-checkbox" value="4"> ★★★★☆ </label>
+                        <label><input type="checkbox" class="rating-checkbox" value="5"> ★★★★★ </label>
+                    </div>
+
+                    <button type="button" id="price-filter-button"> Price filter </button>
+                    <div id="price-filter-panel">
+                        <div>
+                            <label>
+                                <input type="checkbox" id="under-price-checkbox"> Under
+                            </label>
+                            <input type="number" id="under-price" min="0" step="0.01" aria-label="Maximum price">
+                        </div>
+
+                        <div>
+                            <label><input type="checkbox" id="over-price-checkbox"> Over </label>
+                            <input type="number" id="over-price" min="0" step="0.01" aria-label="Minimum price">
+                        </div>
+                    </div>
+                </aside>
+
+                <div id="browse-results">
+                    <label for="sort-products"> Sort by: </label>
+
+                    <select id="sort-products">
+                        <option value="name"> Product name (A–Z) </option>
+                        <option value="price"> Price (low to high) </option>
+                        <option value="category"> Category (A–Z) </option>
+                    </select>
+                    <button type="button" id="clear-filters-button"> Clear All </button>
+                    <p id="browse-message"></p>
+
+                    <div id="product-list"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Single product view: details, quantity, specifications, and reviews -->
+        <section id="single-view" style="display: none;">
+            <p id="single-breadcrumb"></p>
+            <h2 id="single-title"> Product Details </h2>
+            <img id="single-image" src="" alt="">
+            <p id="single-description"></p>
+            <p id="single-price"></p>
+            <p id="single-sku"></p>
+            <p id="single-rating"></p>
+            <p id="single-stock"></p>
+            <div id="single-tags"></div>
+
+            <div>
+                <label for="single-quantity"> Quantity: </label>
+                <input type="number" id="single-quantity" min="1" step="1" value="1">
+
+                <button type="button" id="single-add-button"> Add to Cart </button>
+
+            </div>
+
+            <div>
+                <button type="button" id="specifications-button"> Specifications </button>
+                <button type="button" id="reviews-button"> Reviews </button>
+            </div>
+
+            <div id="specifications-panel">
+                <p id="single-weight"></p>
+                <p id="single-dimensions"></p>
+                <p id="single-warranty"></p>
+                <p id="single-shipping"></p>
+                <p id="single-return"></p>
+            </div>
+
+            <div id="reviews-panel" style="display: none;">
+                <div id="single-reviews"></div>
+            </div>
+
+        </section>
+
+        <!-- Shopping cart: items, shipping options, and order totals -->
+        <section id="cart-view" style="display: none;">
+            <h2> Shopping Cart </h2>
+
+            <p id="cart-message"></p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th> Remove </th>
+                        <th> Image </th>
+                        <th> Product </th>
+                        <th> Price </th>
+                        <th> Quantity </th>
+                        <th> Subtotal </th>
+                    </tr>
+                </thead>
+
+                <tbody id="cart-items"></tbody>
+            </table>
+
+            <h3> Shipping </h3>
+
+            <label for="shipping-method"> Shipping method: </label>
+            <select id="shipping-method">
+                <option value="standard"> Standard </option>
+                <option value="express"> Express </option>
+                <option value="priority"> Priority </option>
+            </select>
+
+            <label for="shipping-destination"> Destination: </label>
+            <select id="shipping-destination">
+                <option value="canada"> Canada </option>
+                <option value="usa"> United States </option>
+                <option value="international"> International </option>
+            </select>
+
+            <h3>Summary</h3>
+            <p>Merchandise: <span id="cart-merchandise"> $0.00 </span></p>
+            <p>Shipping: <span id="cart-shipping"> $0.00 </span></p>
+            <p>Tax: <span id="cart-tax"> $0.00 </span></p>
+            <p>Total: <span id="cart-total"> $0.00 </span></p>
+
+            <button type="button" id="checkout-button"> Checkout </button>
+
+        </section>
+
+    </main>
+
+    <!-- Shared footer -->
+    <footer>
+        <p> COMP 3512 Assignment 2 | Daniel Akele </p>
+        <p>
+            <a href="https://github.com/DAkele416/comp3512-assignment2">
+                View project on GitHub
+            </a>
+        </p>
+    </footer>
+
+    <!-- About Us popup -->
+    <div id="about-popup" style="display: none;">
+        <div id="about-content">
+            <h2> About Us </h2>
+            <p> Created by Daniel Akele for COMP 3512 Assignment 2. </p>
+            <p> This store uses HTML, CSS, and JavaScript. </p>
+            <p> Product data comes from DummyJSON. </p>
+            <p>
+                <a href="https://github.com/DAkele416/comp3512-assignment2">
+                    View project on GitHub
+                </a>
+            </p>
+            <button type="button" id="close-about-button"> Close </button>
+        </div>
+    </div>
+
+</body>
+
+</html>
